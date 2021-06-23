@@ -33,7 +33,7 @@ class StoryMenuState extends MusicBeatState
 			['Satin Panties', "High", "Milf"],
 			['Cocoa', 'Eggnog', 'Winter Horrorland'],
 			['Senpai', 'Roses', 'Thorns'],
-			['Inhibition', 'Rehersal', 'Stage Showdown'],
+			['Inhibition', 'Rehearsal', 'Stage Showdown'],
 			['idk yet']
 		];
 	}
@@ -61,7 +61,7 @@ class StoryMenuState extends MusicBeatState
 		"MOMMY MUST MURDER",
 		"RED SNOW",
 		"Hating Simulator ft. Moawling",
-		"idk yet",
+		"Stage Showdown",
 		"i don't know yet"
 	];
 
