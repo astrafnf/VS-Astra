@@ -96,10 +96,15 @@ class Highscore
 	{
 		var daSong:String = song;
 
-		if (diff == 0)
-			daSong += '-easy';
-		else if (diff == 2)
-			daSong += '-hard';
+		switch(diff)
+		{
+			case 0:
+				daSong += '-easy';
+			case 2:
+				daSong += '-hard';
+			case 3:
+				daSong += '-aaaaaa';
+		}
 
 		return daSong;
 	}
