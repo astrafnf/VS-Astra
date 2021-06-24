@@ -208,7 +208,10 @@ class StoryMenuState extends MusicBeatState
 
 		scoreText.text = "WEEK SCORE:" + lerpScore;
 
-		txtWeekTitle.text = weekNames[curWeek].toUpperCase();
+		if(curWeek == 1 && FlxG.save.data.weekUnlocked == 0)
+			txtWeekTitle.text = "HUH WHAT'S THIS ?";
+		else
+			txtWeekTitle.text = weekNames[curWeek].toUpperCase();
 		txtWeekTitle.x = FlxG.width - (txtWeekTitle.width + 10);
 
 		// FlxG.watch.addQuick('font', scoreText.font);
@@ -388,18 +391,23 @@ class StoryMenuState extends MusicBeatState
 		grpWeekCharacters.members[1].setCharacter(weekCharacters[curWeek][1]);
 		grpWeekCharacters.members[2].setCharacter(weekCharacters[curWeek][2]);
 
-		txtTracklist.text = "Tracks\n";
-		var stringThing:Array<String> = weekData()[curWeek];
+		if(curWeek == 1 && FlxG.save.data.weekUnlocked == 0)
+			txtTracklist.text = "";
+		else
+		{
+			txtTracklist.text = "Tracks\n";
+				var stringThing:Array<String> = weekData()[curWeek];
 
-		for (i in stringThing)
-			txtTracklist.text += "\n" + i;
+			for (i in stringThing)
+				txtTracklist.text += "\n" + i;
 
-		txtTracklist.text = txtTracklist.text.toUpperCase();
+			txtTracklist.text = txtTracklist.text.toUpperCase();
 
-		txtTracklist.screenCenter(X);
-		txtTracklist.x -= FlxG.width * 0.35;
+			txtTracklist.screenCenter(X);
+			txtTracklist.x -= FlxG.width * 0.35;
 
-		txtTracklist.text += "\n";
+			txtTracklist.text += "\n";
+		}
 
 		#if !switch
 		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
