@@ -34,7 +34,7 @@ class StoryMenuState extends MusicBeatState
 			['Cocoa', 'Eggnog', 'Winter Horrorland'],
 			['Senpai', 'Roses', 'Thorns'],
 			['Inhibition', 'Rehearsal', 'Stage Showdown'],
-			['idk yet']
+			['Afterhours']
 		];
 	}
 	var curDifficulty:Int = 1;
