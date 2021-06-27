@@ -669,6 +669,18 @@ class ChartingState extends MusicBeatState
 		snapText.text = "Snap: 1/" + snap + " (" + (doSnapShit ? "Control to disable" : "Snap Disabled, Control to renable") + ")\nAdd Notes: 1-8 (or click)\n";
 
 		curStep = recalculateSteps();
+		if (_song.noteStyle == 'five' && gridBG.width != GRID_SIZE * 10)
+			{
+				remove(gridBG);
+				gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * 12, GRID_SIZE * 16);
+				add(gridBG);
+			}
+		else if (gridBG.width != GRID_SIZE * 8)
+			{
+				remove(gridBG);
+				gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * 8, GRID_SIZE * 16);
+				add(gridBG);
+			}
 
 		/*if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.RIGHT)
 			snap = snap * 2;

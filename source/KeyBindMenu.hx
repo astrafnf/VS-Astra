@@ -34,17 +34,18 @@ class KeyBindMenu extends FlxSubState
     var keyTextDisplay:FlxText;
     var keyWarning:FlxText;
     var warningTween:FlxTween;
-    var keyText:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT"];
-    var defaultKeys:Array<String> = ["A", "S", "W", "D", "R"];
+    var keyText:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT", "CENTER"];
+    var defaultKeys:Array<String> = ["A", "S", "W", "D", "SPACE"];
     var curSelected:Int = 0;
 
     var keys:Array<String> = [FlxG.save.data.leftBind,
                               FlxG.save.data.downBind,
                               FlxG.save.data.upBind,
-                              FlxG.save.data.rightBind];
+                              FlxG.save.data.rightBind,
+                              FlxG.save.data.centerBind];
 
     var tempKey:String = "";
-    var blacklist:Array<String> = ["ESCAPE", "ENTER", "BACKSPACE", "SPACE"];
+    var blacklist:Array<String> = ["ESCAPE", "ENTER", "BACKSPACE"];
 
     var blackBox:FlxSprite;
     var infoText:FlxText;
@@ -170,10 +171,10 @@ class KeyBindMenu extends FlxSubState
 
         keyTextDisplay.text = "\n\n";
 
-        for(i in 0...4){
+        for(i in 0...5){
 
             var textStart = (i == curSelected) ? "> " : "  ";
-            keyTextDisplay.text += textStart + keyText[i] + ": " + ((keys[i] != keyText[i]) ? (keys[i] + " / ") : "" ) + keyText[i] + " ARROW\n";
+            keyTextDisplay.text += textStart + keyText[i] + ": " + ((keys[i] != keyText[i] && keys[i] != 'SPACE') ? (keys[i] + " / ") : "" ) + (i == 4 ? "SPACE\n" : keyText[i] + " ARROW\n");
 
         }
 
@@ -187,6 +188,7 @@ class KeyBindMenu extends FlxSubState
         FlxG.save.data.downBind = keys[1];
         FlxG.save.data.leftBind = keys[0];
         FlxG.save.data.rightBind = keys[3];
+        FlxG.save.data.centerBind = keys[4];
 
         FlxG.save.flush();
 
@@ -254,9 +256,9 @@ class KeyBindMenu extends FlxSubState
     {
         curSelected += _amount;
                 
-        if (curSelected > 3)
+        if (curSelected > 4)
             curSelected = 0;
         if (curSelected < 0)
-            curSelected = 3;
+            curSelected = 4;
     }
 }

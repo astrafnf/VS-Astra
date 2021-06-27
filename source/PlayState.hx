@@ -1375,7 +1375,9 @@ class PlayState extends MusicBeatState
 		var key = FlxKey.toStringMap.get(Keyboard.__convertKeyCode(evt.keyCode));
 	
 
-		var binds:Array<String> = [FlxG.save.data.leftBind,FlxG.save.data.downBind, FlxG.save.data.upBind, FlxG.save.data.rightBind];
+		var binds:Array<String> = [FlxG.save.data.leftBind, FlxG.save.data.downBind, FlxG.save.data.upBind, FlxG.save.data.rightBind];
+		if(SONG.noteStyle == 'five')
+			binds = [FlxG.save.data.leftBind, FlxG.save.data.downBind, FlxG.save.data.centerBind, FlxG.save.data.upBind, FlxG.save.data.rightBind];
 
 		var data = -1;
 		
@@ -1621,160 +1623,145 @@ class PlayState extends MusicBeatState
 
 	private function generateStaticArrows(player:Int):Void
 	{
-		for (i in 0...4)
+		switch (SONG.noteStyle)
 		{
-			// FlxG.log.add(i);
-			var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
+			case 'five':
+				for (i in 0...5)
+				{
+					// FlxG.log.add(i);
+					var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
 
-			//defaults if no noteStyle was found in chart
-			var noteTypeCheck:String = 'normal';
-		
-			if (PlayStateChangeables.Optimize && player == 0)
-				continue;
+					if (PlayStateChangeables.Optimize && player == 0)
+						continue;
 
-			if (SONG.noteStyle == null) {
-				switch(storyWeek) {case 6: noteTypeCheck = 'pixel';}
-			} else {noteTypeCheck = SONG.noteStyle;}
+					babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
+					babyArrow.animation.addByPrefix('green', 'arrowUP');
+					babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
+					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
+					babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
+					babyArrow.animation.addByPrefix('fifth', 'arrowCENTER');
 
-			switch (noteTypeCheck)
-			{
-				case 'pixel':
-					babyArrow.loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
-					babyArrow.animation.add('green', [6]);
-					babyArrow.animation.add('red', [7]);
-					babyArrow.animation.add('blue', [5]);
-					babyArrow.animation.add('purplel', [4]);
+					babyArrow.antialiasing = true;
+					babyArrow.setGraphicSize(Std.int(babyArrow.width * Note.noteScale));
 
-					babyArrow.setGraphicSize(Std.int(babyArrow.width * daPixelZoom));
+					var nSuf:Array<String> = ['LEFT', 'DOWN', 'CENTER', 'UP', 'RIGHT'];
+					var pPre:Array<String> = ['left', 'down', 'center', 'up', 'right'];
+
+					babyArrow.x += Note.swagWidth * i;
+					babyArrow.animation.addByPrefix('static', 'arrow' + nSuf[i]);
+					babyArrow.animation.addByPrefix('pressed', pPre[i] + ' press', 24, false);
+					babyArrow.animation.addByPrefix('confirm', pPre[i] + ' confirm', 24, false);
+
 					babyArrow.updateHitbox();
-					babyArrow.antialiasing = false;
+					babyArrow.scrollFactor.set();
+
+					if (!isStoryMode)
+					{
+						babyArrow.y -= 10;
+						babyArrow.alpha = 0;
+						FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
+					}
+
+					babyArrow.ID = i;
+
+					switch (player)
+					{
+						case 0:
+							cpuStrums.add(babyArrow);
+						case 1:
+							playerStrums.add(babyArrow);
+					}
+
+					babyArrow.animation.play('static');
+					babyArrow.x += 50;
+					babyArrow.x += ((FlxG.width / 2) * player);
+
+					if (PlayStateChangeables.Optimize)
+						babyArrow.x -= 275;
+
+					cpuStrums.forEach(function(spr:FlxSprite)
+					{
+						spr.centerOffsets(); // CPU arrows start out slightly off-center
+					});
+
+					strumLineNotes.add(babyArrow);
+				}
+			default:
+				for (i in 0...4)
+				{
+					// FlxG.log.add(i);
+					var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
+
+					if (PlayStateChangeables.Optimize && player == 0)
+						continue;
+
+					babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
+					babyArrow.animation.addByPrefix('green', 'arrowUP');
+					babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
+					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
+					babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
+
+					babyArrow.antialiasing = true;
+					babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
 
 					switch (Math.abs(i))
 					{
-						case 2:
-							babyArrow.x += Note.swagWidth * 2;
-							babyArrow.animation.add('static', [2]);
-							babyArrow.animation.add('pressed', [6, 10], 12, false);
-							babyArrow.animation.add('confirm', [14, 18], 12, false);
-						case 3:
-							babyArrow.x += Note.swagWidth * 3;
-							babyArrow.animation.add('static', [3]);
-							babyArrow.animation.add('pressed', [7, 11], 12, false);
-							babyArrow.animation.add('confirm', [15, 19], 24, false);
-						case 1:
-							babyArrow.x += Note.swagWidth * 1;
-							babyArrow.animation.add('static', [1]);
-							babyArrow.animation.add('pressed', [5, 9], 12, false);
-							babyArrow.animation.add('confirm', [13, 17], 24, false);
 						case 0:
 							babyArrow.x += Note.swagWidth * 0;
-							babyArrow.animation.add('static', [0]);
-							babyArrow.animation.add('pressed', [4, 8], 12, false);
-							babyArrow.animation.add('confirm', [12, 16], 24, false);
+							babyArrow.animation.addByPrefix('static', 'arrowLEFT');
+							babyArrow.animation.addByPrefix('pressed', 'left press', 24, false);
+							babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
+						case 1:
+							babyArrow.x += Note.swagWidth * 1;
+							babyArrow.animation.addByPrefix('static', 'arrowDOWN');
+							babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
+							babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
+						case 2:
+							babyArrow.x += Note.swagWidth * 2;
+							babyArrow.animation.addByPrefix('static', 'arrowUP');
+							babyArrow.animation.addByPrefix('pressed', 'up press', 24, false);
+							babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
+						case 3:
+							babyArrow.x += Note.swagWidth * 3;
+							babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
+							babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
+							babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
 					}
-				
-					case 'normal':
-						babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
-						babyArrow.animation.addByPrefix('green', 'arrowUP');
-						babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
-						babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
-						babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
-		
-						babyArrow.antialiasing = true;
-						babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
-		
-						switch (Math.abs(i))
-						{
-							case 0:
-								babyArrow.x += Note.swagWidth * 0;
-								babyArrow.animation.addByPrefix('static', 'arrowLEFT');
-								babyArrow.animation.addByPrefix('pressed', 'left press', 24, false);
-								babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
-							case 1:
-								babyArrow.x += Note.swagWidth * 1;
-								babyArrow.animation.addByPrefix('static', 'arrowDOWN');
-								babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
-								babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
-							case 2:
-								babyArrow.x += Note.swagWidth * 2;
-								babyArrow.animation.addByPrefix('static', 'arrowUP');
-								babyArrow.animation.addByPrefix('pressed', 'up press', 24, false);
-								babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
-							case 3:
-								babyArrow.x += Note.swagWidth * 3;
-								babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
-								babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
-								babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
-							}
-	
-					default:
-						babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
-						babyArrow.animation.addByPrefix('green', 'arrowUP');
-						babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
-						babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
-						babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
-	
-						babyArrow.antialiasing = true;
-						babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
-	
-						switch (Math.abs(i))
-						{
-							case 0:
-								babyArrow.x += Note.swagWidth * 0;
-								babyArrow.animation.addByPrefix('static', 'arrowLEFT');
-								babyArrow.animation.addByPrefix('pressed', 'left press', 24, false);
-								babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
-							case 1:
-								babyArrow.x += Note.swagWidth * 1;
-								babyArrow.animation.addByPrefix('static', 'arrowDOWN');
-								babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
-								babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
-							case 2:
-								babyArrow.x += Note.swagWidth * 2;
-								babyArrow.animation.addByPrefix('static', 'arrowUP');
-								babyArrow.animation.addByPrefix('pressed', 'up press', 24, false);
-								babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
-							case 3:
-								babyArrow.x += Note.swagWidth * 3;
-								babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
-								babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
-								babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
-						}
-			}
 
-			babyArrow.updateHitbox();
-			babyArrow.scrollFactor.set();
+					babyArrow.updateHitbox();
+					babyArrow.scrollFactor.set();
 
-			if (!isStoryMode)
-			{
-				babyArrow.y -= 10;
-				babyArrow.alpha = 0;
-				FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
-			}
+					if (!isStoryMode)
+					{
+						babyArrow.y -= 10;
+						babyArrow.alpha = 0;
+						FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
+					}
 
-			babyArrow.ID = i;
+					babyArrow.ID = i;
 
-			switch (player)
-			{
-				case 0:
-					cpuStrums.add(babyArrow);
-				case 1:
-					playerStrums.add(babyArrow);
-			}
+					switch (player)
+					{
+						case 0:
+							cpuStrums.add(babyArrow);
+						case 1:
+							playerStrums.add(babyArrow);
+					}
 
-			babyArrow.animation.play('static');
-			babyArrow.x += 50;
-			babyArrow.x += ((FlxG.width / 2) * player);
-			
-			if (PlayStateChangeables.Optimize)
-				babyArrow.x -= 275;
-			
-			cpuStrums.forEach(function(spr:FlxSprite)
-			{					
-				spr.centerOffsets(); //CPU arrows start out slightly off-center
-			});
+					babyArrow.animation.play('static');
+					babyArrow.x += 50;
+					babyArrow.x += ((FlxG.width / 2) * player);
 
-			strumLineNotes.add(babyArrow);
+					if (PlayStateChangeables.Optimize)
+						babyArrow.x -= 275;
+
+					cpuStrums.forEach(function(spr:FlxSprite)
+					{
+						spr.centerOffsets(); // CPU arrows start out slightly off-center
+					});
+
+					strumLineNotes.add(babyArrow);
+				}
 		}
 	}
 
@@ -1953,14 +1940,6 @@ class PlayState extends MusicBeatState
 			nps = notesHitArray.length;
 			if (nps > maxNPS)
 				maxNPS = nps;
-		}
-
-		if (FlxG.keys.justPressed.NINE)
-		{
-			if (iconP1.animation.curAnim.name == 'bf-old')
-				iconP1.animation.play(SONG.player1);
-			else
-				iconP1.animation.play('bf-old');
 		}
 
 		switch (curStage)
@@ -2500,8 +2479,16 @@ class PlayState extends MusicBeatState
 						switch (Math.abs(daNote.noteData))
 						{
 							case 2:
-								dad.playAnim('singUP' + altAnim, true);
+								if (SONG.noteStyle == 'five')
+									dad.playAnim('singRIGHT' + altAnim, true);
+								else
+									dad.playAnim('singUP' + altAnim, true);
 							case 3:
+								if (SONG.noteStyle == 'five')
+									dad.playAnim('singUP' + altAnim, true);
+								else
+									dad.playAnim('singRIGHT' + altAnim, true);
+							case 4:
 								dad.playAnim('singRIGHT' + altAnim, true);
 							case 1:
 								dad.playAnim('singDOWN' + altAnim, true);
@@ -3093,44 +3080,93 @@ class PlayState extends MusicBeatState
 		var upHold:Bool = false;
 		var downHold:Bool = false;
 		var rightHold:Bool = false;
-		var leftHold:Bool = false;	
+		var leftHold:Bool = false;
+		var centerHold:Bool = false;
 
 		// THIS FUNCTION JUST FUCKS WIT HELD NOTES AND BOTPLAY/REPLAY
 
 		private function keyShit():Void // I've invested in emma stocks
+	{
+		// control arrays, order L D U R
+		var holdArray:Array<Bool> = [controls.LEFT, controls.DOWN, controls.UP, controls.RIGHT];
+		var pressArray:Array<Bool> = [controls.LEFT_P, controls.DOWN_P, controls.UP_P, controls.RIGHT_P];
+		var releaseArray:Array<Bool> = [controls.LEFT_R, controls.DOWN_R, controls.UP_R, controls.RIGHT_R];
+		if (SONG.noteStyle == 'five')
+		{
+			// control arrays, order L D C U R
+			holdArray = [controls.LEFT, controls.DOWN, controls.CENTER, controls.UP, controls.RIGHT];
+			pressArray = [controls.LEFT_P, controls.DOWN_P, controls.CENTER_P, controls.UP_P, controls.RIGHT_P];
+			releaseArray = [controls.LEFT_R, controls.DOWN_R, controls.CENTER_R, controls.UP_R, controls.RIGHT_R];
+			#if windows
+			if (luaModchart != null)
 			{
-				// control arrays, order L D R U
-				var holdArray:Array<Bool> = [controls.LEFT, controls.DOWN, controls.UP, controls.RIGHT];
-				var pressArray:Array<Bool> = [
-					controls.LEFT_P,
-					controls.DOWN_P,
-					controls.UP_P,
-					controls.RIGHT_P
-				];
-				var releaseArray:Array<Bool> = [
-					controls.LEFT_R,
-					controls.DOWN_R,
-					controls.UP_R,
-					controls.RIGHT_R
-				];
-				#if windows
-				if (luaModchart != null){
-				if (controls.LEFT_P){luaModchart.executeState('keyPressed',["left"]);};
-				if (controls.DOWN_P){luaModchart.executeState('keyPressed',["down"]);};
-				if (controls.UP_P){luaModchart.executeState('keyPressed',["up"]);};
-				if (controls.RIGHT_P){luaModchart.executeState('keyPressed',["right"]);};
-				};
-				#end
-				
-				// Prevent player input if botplay is on
-				if(PlayStateChangeables.botPlay)
+				if (controls.LEFT_P)
 				{
-					holdArray = [false, false, false, false];
-					pressArray = [false, false, false, false];
-					releaseArray = [false, false, false, false];
-				} 
+					luaModchart.executeState('keyPressed', ["left"]);
+				};
+				if (controls.DOWN_P)
+				{
+					luaModchart.executeState('keyPressed', ["down"]);
+				};
+				if (controls.UP_P)
+				{
+					luaModchart.executeState('keyPressed', ["up"]);
+				};
+				if (controls.RIGHT_P)
+				{
+					luaModchart.executeState('keyPressed', ["right"]);
+				};
+				if (controls.CENTER_P)
+					{
+						luaModchart.executeState('keyPressed', ["center"]);
+					};
+			};
+			#end
 
-				var anas:Array<Ana> = [null,null,null,null];
+			// Prevent player input if botplay is on
+			if (PlayStateChangeables.botPlay)
+			{
+				holdArray = [false, false, false, false, false];
+				pressArray = [false, false, false, false, false];
+				releaseArray = [false, false, false, false, false];
+			}
+
+			var anas:Array<Ana> = [null, null, null, null, null];
+		}
+		else
+		{
+			#if windows
+			if (luaModchart != null)
+			{
+				if (controls.LEFT_P)
+				{
+					luaModchart.executeState('keyPressed', ["left"]);
+				};
+				if (controls.DOWN_P)
+				{
+					luaModchart.executeState('keyPressed', ["down"]);
+				};
+				if (controls.UP_P)
+				{
+					luaModchart.executeState('keyPressed', ["up"]);
+				};
+				if (controls.RIGHT_P)
+				{
+					luaModchart.executeState('keyPressed', ["right"]);
+				};
+			};
+			#end
+
+			// Prevent player input if botplay is on
+			if (PlayStateChangeables.botPlay)
+			{
+				holdArray = [false, false, false, false];
+				pressArray = [false, false, false, false];
+				releaseArray = [false, false, false, false];
+			}
+
+			var anas:Array<Ana> = [null, null, null, null];
+		}
 
 				/*for (i in 0...pressArray.length)
 					if (pressArray[i])
@@ -3446,8 +3482,16 @@ class PlayState extends MusicBeatState
 				case 1:
 					boyfriend.playAnim('singDOWNmiss', true);
 				case 2:
-					boyfriend.playAnim('singUPmiss', true);
+					if (SONG.noteStyle == 'five')
+						boyfriend.playAnim('singRIGHTmiss', true);
+					else
+						boyfriend.playAnim('singUPmiss', true);
 				case 3:
+					if (SONG.noteStyle == 'five')
+						boyfriend.playAnim('singUPmiss', true);
+					else
+						boyfriend.playAnim('singRIGHTmiss', true);
+				case 4:
 					boyfriend.playAnim('singRIGHTmiss', true);
 			}
 
@@ -3602,8 +3646,16 @@ class PlayState extends MusicBeatState
 					switch (note.noteData)
 					{
 						case 2:
-							boyfriend.playAnim('singUP', true);
+							if (SONG.noteStyle == 'five')
+								boyfriend.playAnim('dodge', true);
+							else
+								boyfriend.playAnim('singUP', true);
 						case 3:
+							if (SONG.noteStyle == 'five')
+								boyfriend.playAnim('singUP', true);
+							else
+								boyfriend.playAnim('singRIGHT', true);
+						case 4:
 							boyfriend.playAnim('singRIGHT', true);
 						case 1:
 							boyfriend.playAnim('singDOWN', true);

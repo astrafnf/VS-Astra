@@ -18,14 +18,17 @@ enum abstract Action(String) to String from String
 	var LEFT = "left";
 	var RIGHT = "right";
 	var DOWN = "down";
+	var CENTER = "center";
 	var UP_P = "up-press";
 	var LEFT_P = "left-press";
 	var RIGHT_P = "right-press";
 	var DOWN_P = "down-press";
+	var CENTER_P = "center-press";
 	var UP_R = "up-release";
 	var LEFT_R = "left-release";
 	var RIGHT_R = "right-release";
 	var DOWN_R = "down-release";
+	var CENTER_R = "center-release";
 	var ACCEPT = "accept";
 	var BACK = "back";
 	var PAUSE = "pause";
@@ -40,14 +43,17 @@ abstract Action(String) to String from String
 	var LEFT = "left";
 	var RIGHT = "right";
 	var DOWN = "down";
+	var CENTER = "center";
 	var UP_P = "up-press";
 	var LEFT_P = "left-press";
 	var RIGHT_P = "right-press";
 	var DOWN_P = "down-press";
+	var CENTER_P = "center-press";
 	var UP_R = "up-release";
 	var LEFT_R = "left-release";
 	var RIGHT_R = "right-release";
 	var DOWN_R = "down-release";
+	var CENTER_R = "center-release";
 	var ACCEPT = "accept";
 	var BACK = "back";
 	var PAUSE = "pause";
@@ -73,6 +79,7 @@ enum Control
 	LEFT;
 	RIGHT;
 	DOWN;
+	CENTER;
 	RESET;
 	ACCEPT;
 	BACK;
@@ -98,14 +105,17 @@ class Controls extends FlxActionSet
 	var _left = new FlxActionDigital(Action.LEFT);
 	var _right = new FlxActionDigital(Action.RIGHT);
 	var _down = new FlxActionDigital(Action.DOWN);
+	var _center = new FlxActionDigital(Action.CENTER);
 	var _upP = new FlxActionDigital(Action.UP_P);
 	var _leftP = new FlxActionDigital(Action.LEFT_P);
 	var _rightP = new FlxActionDigital(Action.RIGHT_P);
 	var _downP = new FlxActionDigital(Action.DOWN_P);
+	var _centerP = new FlxActionDigital(Action.CENTER_P);
 	var _upR = new FlxActionDigital(Action.UP_R);
 	var _leftR = new FlxActionDigital(Action.LEFT_R);
 	var _rightR = new FlxActionDigital(Action.RIGHT_R);
 	var _downR = new FlxActionDigital(Action.DOWN_R);
+	var _centerR = new FlxActionDigital(Action.CENTER_R);
 	var _accept = new FlxActionDigital(Action.ACCEPT);
 	var _back = new FlxActionDigital(Action.BACK);
 	var _pause = new FlxActionDigital(Action.PAUSE);
@@ -141,6 +151,11 @@ class Controls extends FlxActionSet
 	inline function get_DOWN()
 		return _down.check();
 
+	public var CENTER(get, never):Bool;
+
+	inline function get_CENTER()
+		return _center.check();
+
 	public var UP_P(get, never):Bool;
 
 	inline function get_UP_P()
@@ -161,6 +176,11 @@ class Controls extends FlxActionSet
 	inline function get_DOWN_P()
 		return _downP.check();
 
+	public var CENTER_P(get, never):Bool;
+
+	inline function get_CENTER_P()
+		return _centerP.check();
+
 	public var UP_R(get, never):Bool;
 
 	inline function get_UP_R()
@@ -180,6 +200,11 @@ class Controls extends FlxActionSet
 
 	inline function get_DOWN_R()
 		return _downR.check();
+
+	public var CENTER_R(get, never):Bool;
+
+	inline function get_CENTER_R()
+		return _centerR.check();
 
 	public var ACCEPT(get, never):Bool;
 
@@ -215,14 +240,17 @@ class Controls extends FlxActionSet
 		add(_left);
 		add(_right);
 		add(_down);
+		add(_center);
 		add(_upP);
 		add(_leftP);
 		add(_rightP);
 		add(_downP);
+		add(_centerP);
 		add(_upR);
 		add(_leftR);
 		add(_rightR);
 		add(_downR);
+		add(_centerR);
 		add(_accept);
 		add(_back);
 		add(_pause);
@@ -243,14 +271,17 @@ class Controls extends FlxActionSet
 		add(_left);
 		add(_right);
 		add(_down);
+		add(_center);
 		add(_upP);
 		add(_leftP);
 		add(_rightP);
 		add(_downP);
+		add(_centerP);
 		add(_upR);
 		add(_leftR);
 		add(_rightR);
 		add(_downR);
+		add(_centerR);
 		add(_accept);
 		add(_back);
 		add(_pause);
@@ -305,6 +336,7 @@ class Controls extends FlxActionSet
 			case DOWN: _down;
 			case LEFT: _left;
 			case RIGHT: _right;
+			case CENTER: _center;
 			case ACCEPT: _accept;
 			case BACK: _back;
 			case PAUSE: _pause;
@@ -345,6 +377,10 @@ class Controls extends FlxActionSet
 				func(_down, PRESSED);
 				func(_downP, JUST_PRESSED);
 				func(_downR, JUST_RELEASED);
+			case CENTER:
+				func(_center, PRESSED);
+				func(_centerP, JUST_PRESSED);
+				func(_centerR, JUST_RELEASED);
 			case ACCEPT:
 				func(_accept, JUST_PRESSED);
 			case BACK:
@@ -577,6 +613,7 @@ class Controls extends FlxActionSet
 		inline bindKeys(Control.DOWN, [FlxKey.fromString(FlxG.save.data.downBind), FlxKey.DOWN]);
 		inline bindKeys(Control.LEFT, [FlxKey.fromString(FlxG.save.data.leftBind), FlxKey.LEFT]);
 		inline bindKeys(Control.RIGHT, [FlxKey.fromString(FlxG.save.data.rightBind), FlxKey.RIGHT]);
+		inline bindKeys(Control.CENTER, [FlxKey.fromString(FlxG.save.data.centerBind), FlxKey.SPACE]);
 		inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
 		inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 		inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
