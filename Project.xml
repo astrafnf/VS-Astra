@@ -71,6 +71,7 @@
 	<assets path="assets/week1"    library="week1"    exclude="*.ogg" if="web"/>
 	<assets path="assets/week1"    library="week1"    exclude="*.mp3" unless="web"/>
 	
+	<assets path='art/import' rename='assets/images' />
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
 	<assets path='LICENSE' rename='LICENSE.txt' />
 	<!-- <template path='mods' /> -->
