@@ -64,20 +64,28 @@ class FreeplayState extends MusicBeatState
 		{
 			var data:Array<String> = initSonglist[i].split(':');
 			var meta = new SongMetadata(data[0], Std.parseInt(data[2]), data[1]);
-			songs.push(meta);
-			var format = StringTools.replace(meta.songName, " ", "-");
-			switch (format) {
-				case 'Dad-Battle': format = 'Dadbattle';
-				case 'Philly-Nice': format = 'Philly';
-			}
+			// if(Std.parseInt(data[2]) <= FlxG.save.data.weekUnlocked - 1)
+			// {
+				songs.push(meta);
+				var format = StringTools.replace(meta.songName, " ", "-");
+				switch (format)
+				{
+					case 'Dad-Battle':
+						format = 'Dadbattle';
+					case 'Philly-Nice':
+						format = 'Philly';
+				}
 
-			var diffs = [];
-			FreeplayState.loadDiff(0,format,meta.songName,diffs);
-			FreeplayState.loadDiff(1,format,meta.songName,diffs);
-			FreeplayState.loadDiff(2,format,meta.songName,diffs);
-			FreeplayState.songData.set(meta.songName,diffs);
-			trace('loaded diffs for ' + meta.songName);
-			//diffList += meta.songName + "\nEasy: " + DiffCalc.CalculateDiff(songData.get(meta.songName)[0]) + "\nNormal: " + DiffCalc.CalculateDiff(songData.get(meta.songName)[1]) + "\nHard: " + DiffCalc.CalculateDiff(songData.get(meta.songName)[2]) + "\n\n";
+				/*
+					var diffs = [];
+					FreeplayState.loadDiff(0,format,meta.songName,diffs);
+					FreeplayState.loadDiff(1,format,meta.songName,diffs);
+					FreeplayState.loadDiff(2,format,meta.songName,diffs);
+					FreeplayState.songData.set(meta.songName,diffs);
+					trace('loaded diffs for ' + meta.songName);
+				 */
+			// }
+			// diffList += meta.songName + "\nEasy: " + DiffCalc.CalculateDiff(songData.get(meta.songName)[0]) + "\nNormal: " + DiffCalc.CalculateDiff(songData.get(meta.songName)[1]) + "\nHard: " + DiffCalc.CalculateDiff(songData.get(meta.songName)[2]) + "\n\n";
 		}
 
 		//trace("\n" + diffList);
@@ -276,6 +284,7 @@ class FreeplayState extends MusicBeatState
 				case 'Dad-Battle': songFormat = 'Dadbattle';
 				case 'Philly-Nice': songFormat = 'Philly';
 			}
+			/*
 			var hmm;
 			try
 			{
@@ -290,6 +299,12 @@ class FreeplayState extends MusicBeatState
 
 
 			PlayState.SONG = hmm;
+			*/
+			var poop:String = Highscore.formatSong(songFormat, curDifficulty);
+
+			trace(poop);
+
+			PlayState.SONG = Song.loadFromJson(poop, songFormat);
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = curDifficulty;
 			PlayState.storyWeek = songs[curSelected].week;
@@ -318,7 +333,9 @@ class FreeplayState extends MusicBeatState
 		intendedScore = Highscore.getScore(songHighscore, curDifficulty);
 		combo = Highscore.getCombo(songHighscore, curDifficulty);
 		#end
+		/*
 		diffCalcText.text = 'RATING: ${DiffCalc.CalculateDiff(songData.get(songs[curSelected].songName)[curDifficulty])}';
+		*/
 		diffText.text = CoolUtil.difficultyFromInt(curDifficulty).toUpperCase();
 	}
 
@@ -354,7 +371,9 @@ class FreeplayState extends MusicBeatState
 		// lerpScore = 0;
 		#end
 
+		/*
 		diffCalcText.text = 'RATING: ${DiffCalc.CalculateDiff(songData.get(songs[curSelected].songName)[curDifficulty])}';
+		*/
 		
 		#if PRELOAD_ALL
 		FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);

@@ -60,6 +60,7 @@ class KeyBinds
         if(FlxG.save.data.centerBind == null){
             FlxG.save.data.centerBind = "SPACE";
             trace("No CENTER");
+        }
         
         if(FlxG.save.data.gpupBind == null){
             FlxG.save.data.gpupBind = "DPAD_UP";
