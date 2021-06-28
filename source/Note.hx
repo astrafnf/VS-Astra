@@ -64,62 +64,25 @@ class Note extends FlxSprite
 
 		this.noteData = noteData;
 
-		var daStage:String = PlayState.curStage;
+		frames = Paths.getSparrowAtlas('NOTE_assets');
 
-		//defaults if no noteStyle was found in chart
-		var noteTypeCheck:String = 'normal';
+		animation.addByPrefix('greenScroll', 'green instance 1');
+		animation.addByPrefix('redScroll', 'red instance 1');
+		animation.addByPrefix('blueScroll', 'blue instance 1');
+		animation.addByPrefix('purpleScroll', 'purple instance 1');
+		animation.addByPrefix('fifthScroll', 'fifth instance 1');
 
-		if (PlayState.SONG.noteStyle == null) {
-			switch(PlayState.storyWeek) {case 6: noteTypeCheck = 'pixel';}
-		} else {noteTypeCheck = PlayState.SONG.noteStyle;}
+		animation.addByPrefix('purpleholdend', 'pruple end hold instance 1');
+		animation.addByPrefix('greenholdend', 'green hold end instance 1');
+		animation.addByPrefix('redholdend', 'red hold end instance 1');
+		animation.addByPrefix('blueholdend', 'blue hold end instance 1');
+		animation.addByPrefix('fifthholdend', 'fifth hold end instance 1');
 
-		switch (noteTypeCheck)
-		{
-			case 'pixel':
-				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels','week6'), true, 17, 17);
-
-				animation.add('greenScroll', [6]);
-				animation.add('redScroll', [7]);
-				animation.add('blueScroll', [5]);
-				animation.add('purpleScroll', [4]);
-
-				if (isSustainNote)
-				{
-					loadGraphic(Paths.image('weeb/pixelUI/arrowEnds','week6'), true, 7, 6);
-
-					animation.add('purpleholdend', [4]);
-					animation.add('greenholdend', [6]);
-					animation.add('redholdend', [7]);
-					animation.add('blueholdend', [5]);
-
-					animation.add('purplehold', [0]);
-					animation.add('greenhold', [2]);
-					animation.add('redhold', [3]);
-					animation.add('bluehold', [1]);
-				}
-
-				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
-				updateHitbox();
-			default:
-				frames = Paths.getSparrowAtlas('NOTE_assets');
-
-				animation.addByPrefix('greenScroll', 'green instance 1');
-				animation.addByPrefix('redScroll', 'red instance 1');
-				animation.addByPrefix('blueScroll', 'blue instance 1');
-				animation.addByPrefix('purpleScroll', 'purple instance 1');
-		animation.addByPrefix('fifthScroll', 'fifth0');
-
-				animation.addByPrefix('purpleholdend', 'pruple end hold instance 1');
-				animation.addByPrefix('greenholdend', 'green hold end instance 1');
-				animation.addByPrefix('redholdend', 'red hold end instance 1');
-				animation.addByPrefix('blueholdend', 'blue hold end instance 1');
-		animation.addByPrefix('fifthholdend', 'fifth hold end');
-
-				animation.addByPrefix('purplehold', 'purple hold piece instance 1');
-				animation.addByPrefix('greenhold', 'green hold piece instance 1');
-				animation.addByPrefix('redhold', 'red hold piece instance 1');
-				animation.addByPrefix('bluehold', 'blue hold piece instance 1');
-		animation.addByPrefix('fifthhold', 'fifth hold piece');
+		animation.addByPrefix('purplehold', 'purple hold piece instance 1');
+		animation.addByPrefix('greenhold', 'green hold piece instance 1');
+		animation.addByPrefix('redhold', 'red hold piece instance 1');
+		animation.addByPrefix('bluehold', 'blue hold piece instance 1');
+		animation.addByPrefix('fifthhold', 'fifth hold piece instance 1');
 
 		setGraphicSize(Std.int(width * noteScale));
 		updateHitbox();
@@ -146,7 +109,7 @@ class Note extends FlxSprite
 
 			x += width / 2;
 
-			animation.play(frameN[noteData] + 'holdpiece');
+			animation.play(frameN[noteData] + 'holdend');
 
 			updateHitbox();
 
@@ -154,7 +117,7 @@ class Note extends FlxSprite
 
 			if (prevNote.isSustainNote)
 			{
-				prevNote.animation.play(frameN[noteData] + 'holdend');
+				prevNote.animation.play(frameN[noteData] + 'hold');
 
 				if(FlxG.save.data.scrollSpeed != 1)
 					prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * FlxG.save.data.scrollSpeed;

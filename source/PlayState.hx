@@ -1696,22 +1696,21 @@ class PlayState extends MusicBeatState
 						continue;
 
 					babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
-					babyArrow.animation.addByPrefix('green', 'arrowUP');
-					babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
-					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
-					babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
-					babyArrow.animation.addByPrefix('fifth', 'arrowCENTER');
+					babyArrow.animation.addByPrefix('green', 'arrow static instance 1');
+					babyArrow.animation.addByPrefix('blue', 'arrow static instance 2');
+					babyArrow.animation.addByPrefix('purple', 'arrow static instance 3');
+					babyArrow.animation.addByPrefix('red', 'arrow static instance 4');
+					babyArrow.animation.addByPrefix('fifth', 'arrow static instance 5');
 
 					babyArrow.antialiasing = true;
 					babyArrow.setGraphicSize(Std.int(babyArrow.width * Note.noteScale));
 
-					var nSuf:Array<String> = ['LEFT', 'DOWN', 'CENTER', 'UP', 'RIGHT'];
 					var pPre:Array<String> = ['left', 'down', 'center', 'up', 'right'];
 
 					babyArrow.x += Note.swagWidth * i;
-					babyArrow.animation.addByPrefix('static', 'arrow' + nSuf[i]);
-					babyArrow.animation.addByPrefix('pressed', pPre[i] + ' press', 24, false);
-					babyArrow.animation.addByPrefix('confirm', pPre[i] + ' confirm', 24, false);
+					babyArrow.animation.addByPrefix('static', 'arrow static instance ' + (i + 1));
+					babyArrow.animation.addByPrefix('pressed', pPre[i] + ' press instance 1', 24, false);
+					babyArrow.animation.addByPrefix('confirm', pPre[i] + ' confirm instance 1', 24, false);
 
 					babyArrow.updateHitbox();
 					babyArrow.scrollFactor.set();
@@ -1757,37 +1756,37 @@ class PlayState extends MusicBeatState
 						continue;
 
 					babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
-					babyArrow.animation.addByPrefix('green', 'arrowUP');
-					babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
-					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
-					babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
-
+					babyArrow.animation.addByPrefix('green', 'arrow static instance 1');
+					babyArrow.animation.addByPrefix('blue', 'arrow static instance 2');
+					babyArrow.animation.addByPrefix('purple', 'arrow static instance 3');
+					babyArrow.animation.addByPrefix('red', 'arrow static instance 4');
+	
 					babyArrow.antialiasing = true;
 					babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
-
+	
 					switch (Math.abs(i))
 					{
 						case 0:
 							babyArrow.x += Note.swagWidth * 0;
-							babyArrow.animation.addByPrefix('static', 'arrowLEFT');
-							babyArrow.animation.addByPrefix('pressed', 'left press', 24, false);
-							babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
+							babyArrow.animation.addByPrefix('static', 'arrow static instance 1');
+							babyArrow.animation.addByPrefix('pressed', 'left press instance 1', 24, false);
+							babyArrow.animation.addByPrefix('confirm', 'left confirm instance 1', 24, false);
 						case 1:
 							babyArrow.x += Note.swagWidth * 1;
-							babyArrow.animation.addByPrefix('static', 'arrowDOWN');
-							babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
-							babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
+							babyArrow.animation.addByPrefix('static', 'arrow static instance 2');
+							babyArrow.animation.addByPrefix('pressed', 'down press instance 1', 24, false);
+							babyArrow.animation.addByPrefix('confirm', 'down confirm instance 1', 24, false);
 						case 2:
 							babyArrow.x += Note.swagWidth * 2;
-							babyArrow.animation.addByPrefix('static', 'arrowUP');
-							babyArrow.animation.addByPrefix('pressed', 'up press', 24, false);
-							babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
+							babyArrow.animation.addByPrefix('static', 'arrow static instance 4');
+							babyArrow.animation.addByPrefix('pressed', 'up press instance 1', 24, false);
+							babyArrow.animation.addByPrefix('confirm', 'up confirm instance 1', 24, false);
 						case 3:
 							babyArrow.x += Note.swagWidth * 3;
-							babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
-							babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
-							babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
-					}
+							babyArrow.animation.addByPrefix('static', 'arrow static instance 5');
+							babyArrow.animation.addByPrefix('pressed', 'right press instance 1', 24, false);
+							babyArrow.animation.addByPrefix('confirm', 'right confirm instance 1', 24, false);
+						}
 
 					babyArrow.updateHitbox();
 					babyArrow.scrollFactor.set();
@@ -3151,248 +3150,251 @@ class PlayState extends MusicBeatState
 
 		// THIS FUNCTION JUST FUCKS WIT HELD NOTES AND BOTPLAY/REPLAY (also gamepad shit)
 
-		private function keyShit():Void // I've invested in emma stocks
+	private function keyShit():Void // I've invested in emma stocks
 	{
-		// control arrays, order L D U R
-		var holdArray:Array<Bool> = [controls.LEFT, controls.DOWN, controls.UP, controls.RIGHT];
-		var pressArray:Array<Bool> = [controls.LEFT_P, controls.DOWN_P, controls.UP_P, controls.RIGHT_P];
-		var releaseArray:Array<Bool> = [controls.LEFT_R, controls.DOWN_R, controls.UP_R, controls.RIGHT_R];
-		if (SONG.noteStyle == 'five')
-		{
-			// control arrays, order L D C U R
+		var five:Bool = (SONG.noteStyle == 'five');
+
+		var holdArray:Array<Bool>;
+		var pressArray:Array<Bool>;
+		var releaseArray:Array<Bool>;
+
+		if (five)
+		{ // control arrays, order L D C U R
 			holdArray = [controls.LEFT, controls.DOWN, controls.CENTER, controls.UP, controls.RIGHT];
 			pressArray = [controls.LEFT_P, controls.DOWN_P, controls.CENTER_P, controls.UP_P, controls.RIGHT_P];
 			releaseArray = [controls.LEFT_R, controls.DOWN_R, controls.CENTER_R, controls.UP_R, controls.RIGHT_R];
-			#if windows
-			if (luaModchart != null)
-			{
-				if (controls.LEFT_P)
-				{
-					luaModchart.executeState('keyPressed', ["left"]);
-				};
-				if (controls.DOWN_P)
-				{
-					luaModchart.executeState('keyPressed', ["down"]);
-				};
-				if (controls.UP_P)
-				{
-					luaModchart.executeState('keyPressed', ["up"]);
-				};
-				if (controls.RIGHT_P)
-				{
-					luaModchart.executeState('keyPressed', ["right"]);
-				};
-				if (controls.CENTER_P)
-					{
-						luaModchart.executeState('keyPressed', ["center"]);
-					};
-			};
-			#end
+		}
+		else
+		{
+			// control arrays, order L D U R
+			holdArray = [controls.LEFT, controls.DOWN, controls.UP, controls.RIGHT];
+			pressArray = [controls.LEFT_P, controls.DOWN_P, controls.UP_P, controls.RIGHT_P];
+			releaseArray = [controls.LEFT_R, controls.DOWN_R, controls.UP_R, controls.RIGHT_R];
+		}
 
-			// Prevent player input if botplay is on
-			if (PlayStateChangeables.botPlay)
+		#if windows
+		if (luaModchart != null)
+		{
+			if (controls.LEFT_P)
+			{
+				luaModchart.executeState('keyPressed', ["left"]);
+			};
+			if (controls.DOWN_P)
+			{
+				luaModchart.executeState('keyPressed', ["down"]);
+			};
+			if (controls.UP_P)
+			{
+				luaModchart.executeState('keyPressed', ["up"]);
+			};
+			if (controls.RIGHT_P)
+			{
+				luaModchart.executeState('keyPressed', ["right"]);
+			};
+			if (controls.CENTER_P)
+			{
+				luaModchart.executeState('keyPressed', ["center"]);
+			};
+		};
+		#end
+
+		var nonCpp = false;
+
+		// Prevent player input if botplay is on
+		if (PlayStateChangeables.botPlay)
+		{
+			if (five)
 			{
 				holdArray = [false, false, false, false, false];
 				pressArray = [false, false, false, false, false];
 				releaseArray = [false, false, false, false, false];
 			}
-
-			var anas:Array<Ana> = [null, null, null, null, null];
-		}
-		else
-		{
-			#if windows
-			if (luaModchart != null)
-			{
-				if (controls.LEFT_P)
-				{
-					luaModchart.executeState('keyPressed', ["left"]);
-				};
-				if (controls.DOWN_P)
-				{
-					luaModchart.executeState('keyPressed', ["down"]);
-				};
-				if (controls.UP_P)
-				{
-					luaModchart.executeState('keyPressed', ["up"]);
-				};
-				if (controls.RIGHT_P)
-				{
-					luaModchart.executeState('keyPressed', ["right"]);
-				};
-			};
-			#end
-
-			// Prevent player input if botplay is on
-			if (PlayStateChangeables.botPlay)
+			else
 			{
 				holdArray = [false, false, false, false];
 				pressArray = [false, false, false, false];
 				releaseArray = [false, false, false, false];
 			}
+		}
 
-				#if !cpp
-				nonCpp = true;
-				#end
+		#if !cpp
+		nonCpp = true;
+		#end
 
-				var anas:Array<Ana> = [null,null,null,null];
+		var anas:Array<Ana>;
+		if (five)
+		{
+			anas = [null, null, null, null, null];
+		}
+		else
+		{
+			anas = [null, null, null, null];
+		}
 
-				for (i in 0...pressArray.length)
-					if (pressArray[i])
-						anas[i] = new Ana(Conductor.songPosition, null, false, "miss", i);
+		for (i in 0...pressArray.length)
+			if (pressArray[i])
+				anas[i] = new Ana(Conductor.songPosition, null, false, "miss", i);
 
-				// HOLDS, check for sustain notes
-				if (holdArray.contains(true) && /*!boyfriend.stunned && */ generatedMusic)
+		// HOLDS, check for sustain notes
+		if (holdArray.contains(true) && /*!boyfriend.stunned && */ generatedMusic)
+		{
+			notes.forEachAlive(function(daNote:Note)
+			{
+				if (daNote.isSustainNote && daNote.canBeHit && daNote.mustPress && holdArray[daNote.noteData])
+					goodNoteHit(daNote);
+			});
+		}
+
+		if ((KeyBinds.gamepad && !FlxG.keys.justPressed.ANY) || nonCpp)
+		{
+			// PRESSES, check for note hits
+			if (pressArray.contains(true) && generatedMusic)
+			{
+				boyfriend.holdTimer = 0;
+
+				var possibleNotes:Array<Note> = []; // notes that can be hit
+				var directionList:Array<Int> = []; // directions that can be hit
+				var dumbNotes:Array<Note> = []; // notes to kill later
+				var directionsAccounted:Array<Bool>; // we don't want to do judgments for more than one presses
+				if (five)
 				{
-					notes.forEachAlive(function(daNote:Note)
-					{
-						if (daNote.isSustainNote && daNote.canBeHit && daNote.mustPress && holdArray[daNote.noteData])
-							goodNoteHit(daNote);
-					});
+					directionsAccounted = [false, false, false, false, false];
 				}
-		 
-				if ((KeyBinds.gamepad && !FlxG.keys.justPressed.ANY) || nonCpp)
+				else
 				{
-					// PRESSES, check for note hits
-					if (pressArray.contains(true) && generatedMusic)
-					{
-						boyfriend.holdTimer = 0;
-			
-						var possibleNotes:Array<Note> = []; // notes that can be hit
-						var directionList:Array<Int> = []; // directions that can be hit
-						var dumbNotes:Array<Note> = []; // notes to kill later
-						var directionsAccounted:Array<Bool> = [false,false,false,false]; // we don't want to do judgments for more than one presses
-						
-						notes.forEachAlive(function(daNote:Note)
-							{
-								if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit && !directionsAccounted[daNote.noteData])
-								{
-									if (directionList.contains(daNote.noteData))
-										{
-											directionsAccounted[daNote.noteData] = true;
-											for (coolNote in possibleNotes)
-											{
-												if (coolNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - coolNote.strumTime) < 10)
-												{ // if it's the same note twice at < 10ms distance, just delete it
-													// EXCEPT u cant delete it in this loop cuz it fucks with the collection lol
-													dumbNotes.push(daNote);
-													break;
-												}
-												else if (coolNote.noteData == daNote.noteData && daNote.strumTime < coolNote.strumTime)
-												{ // if daNote is earlier than existing note (coolNote), replace
-													possibleNotes.remove(coolNote);
-													possibleNotes.push(daNote);
-													break;
-												}
-											}
-										}
-										else
-										{
-											possibleNotes.push(daNote);
-											directionList.push(daNote.noteData);
-										}
-								}
-						});
-
-						for (note in dumbNotes)
-						{
-							FlxG.log.add("killing dumb ass note at " + note.strumTime);
-							note.kill();
-							notes.remove(note, true);
-							note.destroy();
-						}
-			
-						possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
-						if (perfectMode)
-							goodNoteHit(possibleNotes[0]);
-						else if (possibleNotes.length > 0)
-						{
-							if (!FlxG.save.data.ghost)
-							{
-								for (shit in 0...pressArray.length)
-									{ // if a direction is hit that shouldn't be
-										if (pressArray[shit] && !directionList.contains(shit))
-											noteMiss(shit, null);
-									}
-							}
-							for (coolNote in possibleNotes)
-							{
-								if (pressArray[coolNote.noteData])
-								{
-									if (mashViolations != 0)
-										mashViolations--;
-									scoreTxt.color = FlxColor.WHITE;
-									var noteDiff:Float = -(coolNote.strumTime - Conductor.songPosition);
-									anas[coolNote.noteData].hit = true;
-									anas[coolNote.noteData].hitJudge = Ratings.CalculateRating(noteDiff, Math.floor((PlayStateChangeables.safeFrames / 60) * 1000));
-									anas[coolNote.noteData].nearestNote = [coolNote.strumTime,coolNote.noteData,coolNote.sustainLength];
-									goodNoteHit(coolNote);
-								}
-							}
-						}
-						else if (!FlxG.save.data.ghost)
-							{
-								for (shit in 0...pressArray.length)
-									if (pressArray[shit])
-										noteMiss(shit, null);
-							}
-					}
-
-					if (!loadRep)
-						for (i in anas)
-							if (i != null)
-								replayAna.anaArray.push(i); // put em all there
+					directionsAccounted = [false, false, false, false];
 				}
+
 				notes.forEachAlive(function(daNote:Note)
 				{
-					if(PlayStateChangeables.useDownscroll && daNote.y > strumLine.y ||
-					!PlayStateChangeables.useDownscroll && daNote.y < strumLine.y)
+					if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit && !directionsAccounted[daNote.noteData])
 					{
-						// Force good note hit regardless if it's too late to hit it or not as a fail safe
-						if(PlayStateChangeables.botPlay && daNote.canBeHit && daNote.mustPress ||
-						PlayStateChangeables.botPlay && daNote.tooLate && daNote.mustPress)
+						if (directionList.contains(daNote.noteData))
 						{
-							if(loadRep)
+							directionsAccounted[daNote.noteData] = true;
+							for (coolNote in possibleNotes)
 							{
-								//trace('ReplayNote ' + tmpRepNote.strumtime + ' | ' + tmpRepNote.direction);
-								var n = findByTime(daNote.strumTime);
-								trace(n);
-								if(n != null)
-								{
-									goodNoteHit(daNote);
-									boyfriend.holdTimer = daNote.sustainLength;
+								if (coolNote.noteData == daNote.noteData && Math.abs(daNote.strumTime - coolNote.strumTime) < 10)
+								{ // if it's the same note twice at < 10ms distance, just delete it
+									// EXCEPT u cant delete it in this loop cuz it fucks with the collection lol
+									dumbNotes.push(daNote);
+									break;
 								}
-							}else {
-								goodNoteHit(daNote);
-								boyfriend.holdTimer = daNote.sustainLength;
+								else if (coolNote.noteData == daNote.noteData && daNote.strumTime < coolNote.strumTime)
+								{ // if daNote is earlier than existing note (coolNote), replace
+									possibleNotes.remove(coolNote);
+									possibleNotes.push(daNote);
+									break;
+								}
 							}
+						}
+						else
+						{
+							possibleNotes.push(daNote);
+							directionList.push(daNote.noteData);
 						}
 					}
 				});
-				
-				if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && (!holdArray.contains(true) || PlayStateChangeables.botPlay))
+
+				for (note in dumbNotes)
 				{
-					if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
-						boyfriend.playAnim('idle');
+					FlxG.log.add("killing dumb ass note at " + note.strumTime);
+					note.kill();
+					notes.remove(note, true);
+					note.destroy();
 				}
-		 
-				playerStrums.forEach(function(spr:FlxSprite)
+
+				possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
+				if (perfectMode)
+					goodNoteHit(possibleNotes[0]);
+				else if (possibleNotes.length > 0)
 				{
-					if (pressArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
-						spr.animation.play('pressed');
-					if (!holdArray[spr.ID])
-						spr.animation.play('static');
-		 
-					if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+					if (!FlxG.save.data.ghost)
 					{
-						spr.centerOffsets();
-						spr.offset.x -= 13;
-						spr.offset.y -= 13;
+						for (shit in 0...pressArray.length)
+						{ // if a direction is hit that shouldn't be
+							if (pressArray[shit] && !directionList.contains(shit))
+								noteMiss(shit, null);
+						}
+					}
+					for (coolNote in possibleNotes)
+					{
+						if (pressArray[coolNote.noteData])
+						{
+							if (mashViolations != 0)
+								mashViolations--;
+							scoreTxt.color = FlxColor.WHITE;
+							var noteDiff:Float = -(coolNote.strumTime - Conductor.songPosition);
+							anas[coolNote.noteData].hit = true;
+							anas[coolNote.noteData].hitJudge = Ratings.CalculateRating(noteDiff, Math.floor((PlayStateChangeables.safeFrames / 60) * 1000));
+							anas[coolNote.noteData].nearestNote = [coolNote.strumTime, coolNote.noteData, coolNote.sustainLength];
+							goodNoteHit(coolNote);
+						}
+					}
+				}
+				else if (!FlxG.save.data.ghost)
+				{
+					for (shit in 0...pressArray.length)
+						if (pressArray[shit])
+							noteMiss(shit, null);
+				}
+			}
+
+			if (!loadRep)
+				for (i in anas)
+					if (i != null)
+						replayAna.anaArray.push(i); // put em all there
+		}
+		notes.forEachAlive(function(daNote:Note)
+		{
+			if (PlayStateChangeables.useDownscroll && daNote.y > strumLine.y || !PlayStateChangeables.useDownscroll && daNote.y < strumLine.y)
+			{
+				// Force good note hit regardless if it's too late to hit it or not as a fail safe
+				if (PlayStateChangeables.botPlay && daNote.canBeHit && daNote.mustPress || PlayStateChangeables.botPlay && daNote.tooLate && daNote.mustPress)
+				{
+					if (loadRep)
+					{
+						// trace('ReplayNote ' + tmpRepNote.strumtime + ' | ' + tmpRepNote.direction);
+						var n = findByTime(daNote.strumTime);
+						trace(n);
+						if (n != null)
+						{
+							goodNoteHit(daNote);
+							boyfriend.holdTimer = daNote.sustainLength;
+						}
 					}
 					else
-						spr.centerOffsets();
-				});
+					{
+						goodNoteHit(daNote);
+						boyfriend.holdTimer = daNote.sustainLength;
+					}
+				}
 			}
+		});
+
+		if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && (!holdArray.contains(true) || PlayStateChangeables.botPlay))
+		{
+			if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
+				boyfriend.playAnim('idle');
+		}
+
+		playerStrums.forEach(function(spr:FlxSprite)
+		{
+			if (pressArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
+				spr.animation.play('pressed');
+			if (!holdArray[spr.ID])
+				spr.animation.play('static');
+
+			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+			{
+				spr.centerOffsets();
+				spr.offset.x -= 13;
+				spr.offset.y -= 13;
+			}
+			else
+				spr.centerOffsets();
+		});
+	}
 
 			public function findByTime(time:Float):Array<Dynamic>
 				{

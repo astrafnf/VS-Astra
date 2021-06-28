@@ -4,8 +4,8 @@
 	<!-- http://www.adobe.com/products/animate.html -->
 	<SubTexture name="arrow static instance 10000" x="488" y="238" width="155" height="158"/>
 	<SubTexture name="arrow static instance 20000" x="647" y="238" width="157" height="155"/>
-	<SubTexture name="arrow static instance 30000" x="808" y="238" width="155" height="157"/>
 	<SubTexture name="arrow static instance 40000" x="323" y="240" width="157" height="154"/>
+	<SubTexture name="arrow static instance 50000" x="808" y="238" width="155" height="157"/>
 	<SubTexture name="blue hold end instance 10000" x="1062" y="452" width="51" height="64"/>
 	<SubTexture name="blue hold piece instance 10000" x="1282" y="457" width="51" height="44"/>
 	<SubTexture name="blue instance 10000" x="0" y="240" width="158" height="154"/>
@@ -90,16 +90,16 @@
 	<SubTexture name="up press instance 10002" x="158" y="398" width="154" height="151"/>
 	<SubTexture name="up press instance 10003" x="158" y="398" width="154" height="151"/>
 	
-	<SubTexture name="center confirm0000" x="0" y="782" width="183" height="98"/>
-	<SubTexture name="center confirm0001" x="184" y="782" width="179" height="96"/>
-	<SubTexture name="center confirm0002" x="364" y="782" width="170" height="91"/>
-	<SubTexture name="center confirm0003" x="364" y="782" width="170" height="91"/>
-	<SubTexture name="center press0000" x="0" y="881" width="152" height="67"/>
-	<SubTexture name="center press0001" x="0" y="881" width="152" height="67"/>
-	<SubTexture name="center press0002" x="153" y="881" width="160" height="70"/>
-	<SubTexture name="center press0003" x="153" y="881" width="160" height="70"/>
-	<SubTexture name="fifth0000" x="0" y="952" width="171" height="71"/>
-	<SubTexture name="fifth hold end0000" x="223" y="952" width="49" height="64"/>
-	<SubTexture name="fifth hold piece0000" x="172" y="952" width="50" height="44"/>
-	<SubTexture name="arrowCENTER0000" x="314" y="879" width="160" height="70"/>
+	<SubTexture name="center confirm instance 10000" x="0" y="782" width="183" height="98"/>
+	<SubTexture name="center confirm instance 10001" x="184" y="782" width="179" height="96"/>
+	<SubTexture name="center confirm instance 10002" x="364" y="782" width="170" height="91"/>
+	<SubTexture name="center confirm instance 10003" x="364" y="782" width="170" height="91"/>
+	<SubTexture name="center press instance 10000" x="0" y="881" width="152" height="67"/>
+	<SubTexture name="center press instance 10001" x="0" y="881" width="152" height="67"/>
+	<SubTexture name="center press instance 10002" x="153" y="881" width="160" height="70"/>
+	<SubTexture name="center press instance 10003" x="153" y="881" width="160" height="70"/>
+	<SubTexture name="fifth instance 10000" x="0" y="952" width="171" height="71"/>
+	<SubTexture name="fifth hold end instance 10000" x="223" y="952" width="49" height="64"/>
+	<SubTexture name="fifth hold piece instance 10000" x="172" y="952" width="50" height="44"/>
+	<SubTexture name="arrow static instance 30000" x="314" y="879" width="160" height="70"/>
 </TextureAtlas>
